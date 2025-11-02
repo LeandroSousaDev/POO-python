@@ -1,19 +1,26 @@
 class ContaBancaria:
-    def __init__(self, titular, saldo):
+    def __init__(self, titular, saldo, numeroDaConta):
         self.__titular = titular
+        self.__numeroDaConta = numeroDaConta
         self.__saldo = saldo
 
     def getTitular(self):
         return self.__titular
-    
+
     def setTitular(self, titular):
-        self.__titular = titular
+        if isinstance(titular, str) and len(titular.strip()) > 0:
+            self.__titular = titular
+        else:
+            raise ValueError("nome do titular invalido")
 
     def getSaldo(self):
         return self.__saldo
-    
-    def setTitular(self, saldo):
-        self.__saldo = saldo
+
+    def setSaldo(self, saldo):
+        if isinstance(saldo, int):
+            self.__saldo = saldo
+        else:
+            raise ValueError("Saldo deve ser um numero")
 
     def depositar(self, valor):
         if valor <= 0:
@@ -31,23 +38,19 @@ class ContaBancaria:
 
     def mostraSaldo(self):
         return f"Conta: {self.getTitular()}, Saldo: {self.getSaldo()}"
-    
-    def transferir(self, emissor, recepitor, valor):
-        emissor.sacar(valor)
 
+    def transferir(self, recepitor, valor):
+        self.sacar(valor)
         recepitor.depositar(valor)
 
 
-mario = ContaBancaria(1524, 100)
-marcos = ContaBancaria(1245, 100)
+
+conta1 = ContaBancaria("Mario" ,100, 1524)
+conta2 = ContaBancaria("Marcos", 100, 1254)
 
 try:
-    mario.sacar(-10)
+    conta1.setTitular("Leandro")
+    print(conta1.mostraSaldo())
 except Exception as e:
     print(e)
 
-mario.transferir(mario, marcos, 10)
-
-print(mario.mostraSaldo())
-print(marcos.mostraSaldo())
-   
